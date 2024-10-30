@@ -51,7 +51,7 @@ class IP3Router:
     def close(self):
         self.sock.close()
 
-router = IP3Router('10.10.116.104')
+router = IP3Router('RPUTER-IP')
 
 while True:
     dst = input("Enter the destination name: ").strip()

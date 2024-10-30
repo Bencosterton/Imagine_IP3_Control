@@ -12,35 +12,33 @@ class IP3Router:
 
     def clear_buffer(self):
         """Clear any existing data in the socket buffer to prevent mixed responses."""
-        self.sock.settimeout(0.1)  # Set a very short timeout to check for leftover data
+        self.sock.settimeout(0.1)  
         try:
             while self.sock.recv(4096):
                 pass
         except socket.timeout:
             pass
-        self.sock.settimeout(None)  # Reset to default blocking mode
+        self.sock.settimeout(None)  
 
     def status(self, dst, retries=3):
         """Send the status command and attempt to get a valid response."""
         for attempt in range(retries):
-            self.clear_buffer()  # Clear any previous responses
+            self.clear_buffer() 
             command = f"~XPOINT?D${{{dst}}}\\"
             self.sock.sendall(command.encode())
 
-            # Wait briefly to allow the router time to process
-            time.sleep(0.2)  # Adjust delay as needed
+            # Wait to allow the router time to process
+            time.sleep(0.2)  
 
-            # Receive the response
+            # response
             response = self.sock.recv(4096).decode()
 
-            # Check if the response contains the destination we asked for
             if f"D${{{dst}}}" in response:
-                # Parse and extract the source from the response
                 match = re.search(r"S\${(.*?)}\\", response)
                 if match:
                     source = match.group(1)
                     print(f"Source '{source}' is routed to Destination '{dst}'")
-                    return source  # Return the source as a result
+                    return source 
                 else:
                     print(f"Could not parse source for {dst}. Raw response: '{response.strip()}'")
                     return None
@@ -48,16 +46,15 @@ class IP3Router:
             print(f"Attempt {attempt + 1} failed. Retrying...")
 
         print(f"Failed to get a valid response for {dst} after {retries} attempts.")
-        return None  # Return None if no valid response after retries
+        return None 
 
     def close(self):
         self.sock.close()
 
-# Example usage
 router = IP3Router('10.10.116.104')
 
 while True:
-    dst = input("Enter the destination name (or 'quit' to exit): ").strip()
+    dst = input("Enter the destination name: ").strip()
     if dst.lower() == 'quit':
         break
     router.status(dst)

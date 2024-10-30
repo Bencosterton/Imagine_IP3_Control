@@ -98,7 +98,7 @@ class IP3Router:
         print(f"Failed to clear route for Source '{src}' after {retries} attempts.")
         return False
 
-router = IP3Router('10.10.116.104')
+router = IP3Router('ROUTER-IP')
 
 while True:
     action = input("Enter 'status' to check a route, 'route' to make a route, or 'quit' to exit: ").strip().lower()

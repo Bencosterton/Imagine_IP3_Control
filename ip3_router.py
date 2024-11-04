@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class IP3Router:
-    def __init__(self, host, port=52116):
+    def __init__(self, host, port=PORT):
         self.host = host
         self.port = port
         self.sock = None

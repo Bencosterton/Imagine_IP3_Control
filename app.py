@@ -25,13 +25,11 @@ DESTINATION_ALIASES = {
 #
 
 SOURCE_CATEGORIES = {
-    'Lines': ['SKYPE-1-1', 'SKYPE-1-2', 'SKYPE-1-3', 'SKYPE-1-4', 'SKYPE-2-1', 'SKYPE-2-2', 'SKYPE-2-3', 'SKYPE-2-4', 'TVU-1-1', 'TVU-1-2', 'TVU-2-1', 'TVU-2-2', 'TVU-3-1', 'TVU-3-2', 'TVU-4-1', 'TVU-4-2', 'TVU-5-1', 'TVU-5-2'], 
-    'VO Embedders': ['DAN-EMB-1', 'DAN-EMB-2', 'DAN-EMB-3'],
+
 }
 
 DESTINATION_CATEGORIES = {
-    'REMS': ['REM01', 'REM02', 'REM03'], 
-    'Vo Embeddes': ['DAN-EMB-1', 'DAN-EMB-2', 'DAN-EMB-3'],
+    
 }
 
 def categorize_with_mapping(items, category_map):

@@ -98,7 +98,7 @@ def try_router_connection():
     """Attempt to connect to the router"""
     global router, simulation_mode
     try:
-        router = IP3Router('10.10.116.104')
+        router = IP3Router('IP-ADDRESS')
         simulation_mode = False
         logger.info("Successfully connected to physical router")
         return True

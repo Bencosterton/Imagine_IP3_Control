@@ -1,0 +1,61 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP3 Router Control</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+                <div class="controls">
+                    <button class="control-btn">PARK</button>
+                    <button class="control-btn" data-source="HD-BARS">HD BARS</button>
+                </div>
+            <div class="route-controls">
+                <div id="selected-source" class="selection-display"></div>
+                <div class="take-button">TAKE</div>
+                <div id="selected-destination" class="selection-display"></div>
+            </div>
+            <button class="lock-btn">Lock DEST</button>
+        </div>
+
+        {% if simulation_mode %}
+        <div class="simulation-banner">
+            Running in Simulation Mode - Router Not Connected
+        </div>
+        {% endif %}
+        
+        <div class="main-panel">
+            <div class="sources-panel">
+                <h2>Sources</h2>
+                <div class="search-container">
+                    <input type="text" id="source-search" class="search-input" placeholder="Search sources...">
+                    <span class="search-count" id="source-count"></span>
+                </div>
+                <div class="sources-grid" id="sources-grid">
+                    {% for source in sources %}
+                    <div class="source-btn" data-source="{{ source }}">{{ source }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="destinations-panel">
+                <h2>Destinations</h2>
+                <div class="search-container">
+                    <input type="text" id="destination-search" class="search-input" placeholder="Search destinations...">
+                    <span class="search-count" id="destination-count"></span>
+                </div>
+                <div class="destinations-grid" id="destinations-grid">
+                    {% for destination in destinations %}
+                    <div class="destination-btn" data-destination="{{ destination }}">{{ destination }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

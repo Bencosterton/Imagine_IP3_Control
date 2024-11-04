@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Router Control Interface</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <div class="status-indicators">
+                <div class="status-item">
+                    <span class="status-dot {% if not simulation_mode %}active{% endif %}"></span>
+                    <span class="status-label">Router Connection Status</span>
+                </div>
+                <div class="timestamp">{{ datetime.now().strftime('%d/%m/%Y %H:%M:%S') }}</div>
+            </div>
+            <div class="router-controls">
+                <div class="poke-toggle">
+                    <input type="checkbox" id="poke-mode" class="poke-checkbox">
+                    <label for="poke-mode">Poké</label>
+                </div>
+                <button class="control-btn" data-source="HD-BARS">HD BARS</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Source Categories -->
+            <div class="category-buttons sources">
+                <button class="category-btn active" data-category="all">All Sources</button>
+                {% for category in source_categories %}
+                <button class="category-btn" data-category="{{ category }}">{{ category }}</button>
+                {% endfor %}
+            </div>
+
+            <!-- Sources Panel -->
+            <div class="panel sources-panel">
+                <h2>SOURCES</h2>
+                <div class="search-container">
+                    <input type="text" id="source-search" class="search-input" placeholder="Search sources...">
+                    <div class="count-badge" id="source-count">0/0</div>
+                </div>
+                <div class="panel-content" id="sources-grid">
+                    {% for source in sources %}
+                    <div class="source-btn" data-source="{{ source }}" data-categories="{{ source_to_categories[source]|join(' ') }}">
+                        {{ source }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Route Control Panel -->
+            <div class="route-control-panel">
+                <div id="source-poke" class="poke-display hidden">
+                    <img src="/static/poke-sprite/A.png" alt="" class="poke-sprite">
+                </div>
+
+                <div id="selected-source" class="selection-display">
+                    <div class="selection-label">SOURCE</div>
+                    <div class="selection-value"></div>
+                </div>
+
+                <div class="take-button-container">
+                    <button class="take-button">TAKE</button>
+                </div>
+
+                <div id="selected-destination" class="selection-display">
+                    <div class="selection-label">DESTINATION</div>
+                    <div class="selection-value"></div>
+                </div>
+
+                <div id="destination-poke" class="poke-display hidden">
+                    <img src="/static/poke-sprite/A.png" alt="" class="poke-sprite">
+                </div>
+            </div>
+
+            <!-- Destinations Panel -->
+            <div class="panel destinations-panel">
+                <h2>DESTINATIONS</h2>
+                <div class="search-container">
+                    <input type="text" id="destination-search" class="search-input" placeholder="Search destinations...">
+                    <div class="count-badge" id="destination-count">0/0</div>
+                </div>
+                <div class="panel-content" id="destinations-grid">
+                    {% for destination in destinations %}
+                    <div class="destination-btn" data-destination="{{ destination }}" data-categories="{{ destination_to_categories[destination]|join(' ') }}">
+                        {{ destination }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Destination Categories -->
+            <div class="category-buttons destinations">
+                <button class="category-btn active" data-category="all">All Destinations</button>
+                {% for category in destination_categories %}
+                <button class="category-btn" data-category="{{ category }}">{{ category }}</button>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if simulation_mode %}
+        <div class="simulation-banner">Router Not Connected</div>
+        {% endif %}
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

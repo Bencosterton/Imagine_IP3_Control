@@ -16,24 +16,7 @@ router = None
 simulation_mode = True
 
 DESTINATION_ALIASES = {
-    'REM01': 'VPRO-1-8',
-    'REM02': 'VPRO-2-8',
-    'REM03': 'VPRO-3-8',
-    'REM04': 'VPRO-4-8',
-    'REM05': 'VPRO-6-3',
-    'REM06': 'VPRO-6-4',
-    'REM07': 'VPRO-1-4',
-    'REM08': 'VPRO-2-4',
-    'REM09': 'VPRO-3-4',
-    'REM10': 'VPRO-4-4',
-    'REM11': 'VPRO-1-5',
-    'REM12': 'VPRO-2-5',
-    'REM13': 'VPRO-3-5',
-    'REM14': 'VPRO-4-5',
-    'REM15': 'VPRO-1-3',
-    'REM16': 'VPRO-2-3',
-    'REM17': 'VPRO-3-3',
-    'REM18': 'VPRO-4-3'
+
 }
 
 

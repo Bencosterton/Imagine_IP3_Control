@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class IP3Router:
-    def __init__(self, host, port=PORT):
+    def __init__(self, host, port=PORT-NUMBER):
         self.host = host
         self.port = port
         self.sock = None
@@ -99,6 +99,10 @@ class IP3Router:
             response = self.sock.recv(4096).decode()
             print(f"Router Response: '{response.strip()}'")
 
+            if "LOCK!D" in response:
+                print(f"Destination '{dst}' is locked")
+                return "locked" 
+                
             current_source = self.status(dst)
             if current_source == src:
                 print(f"Successfully routed Source '{src}' to Destination '{dst}'")
@@ -106,7 +110,7 @@ class IP3Router:
             else:
                 print(f"Attempt {attempt + 1} failed. Unexpected response.")
 
-        print(f"Failed to route Source '{src}' to Destination '{dst}' after {retries} attempts. Final Response: '{response.strip()}'")
+        print(f"Failed to route Source '{src}' to Destination '{dst}' after {retries} attempts.")
         return False
 
     def close(self):
@@ -146,4 +150,42 @@ class IP3Router:
                 time.sleep(1)  
 
         logger.error(f"Failed to clear route for Source '{src}' after {retries} attempts.")
+        return False
+    
+    def lock_destination(self, dst, retries=3):
+        """Lock a destination"""
+        for attempt in range(retries):
+            self.clear_buffer()
+            command = f"LOCK:D${{{dst}}};V${{ON}};U#{{20}}\\\n"
+            self.sock.sendall(command.encode())
+
+            time.sleep(0.5)
+
+            response = self.sock.recv(4096).decode()
+            print(f"Lock Response: '{response.strip()}'")
+
+            print(f"Lock command sent for destination '{dst}'")
+            return True
+
+        return False
+
+    def unlock_destination(self, dst, retries=3):
+        """Unlock a destination"""
+        for attempt in range(retries):
+            self.clear_buffer()
+            command = f"LOCK:D${{{dst}}};V${{OFF}};U#{{20}}\\\n" 
+            self.sock.sendall(command.encode())
+
+            time.sleep(0.5)
+
+            response = self.sock.recv(4096).decode()
+            print(f"Unlock Response: '{response.strip()}'")
+
+            if response:
+                print(f"Successfully unlocked destination '{dst}'")
+                return True
+            else:
+                print(f"Attempt {attempt + 1} failed to unlock destination")
+
+        print(f"Failed to unlock destination '{dst}' after {retries} attempts")
         return False

@@ -137,16 +137,24 @@ def make_route():
             })
         
         router_destination = DESTINATION_ALIASES.get(destination, destination)
+        router_source = SOURCE_ALIASES.get(source, source)
         
-        success = router.route(source, router_destination)
-        message = f'Route {"successful" if success else "failed"}: {source} → {destination}'
+        result = router.route(router_source, router_destination)
+        
+        if result == "locked":
+            return jsonify({
+                'success': False,
+                'locked': True,
+                'message': 'Destination is locked, contact Engineering',
+                'simulation': simulation_mode
+            })
         
         return jsonify({
-            'success': success,
-            'message': message,
+            'success': True,
+            'result': result,
             'simulation': simulation_mode
         })
-        
+            
     except Exception as e:
         logger.error(f"Error in route operation: {str(e)}")
         return jsonify({

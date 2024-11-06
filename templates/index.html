@@ -17,10 +17,6 @@
                 <div class="timestamp">{{ datetime.now().strftime('%d/%m/%Y %H:%M:%S') }}</div>
             </div>
             <div class="router-controls">
-                <div class="poke-toggle">
-                    <input type="checkbox" id="poke-mode" class="poke-checkbox">
-                    <label for="poke-mode">Poké</label>
-                </div>
                 <button class="control-btn" data-source="HD-BARS">HD BARS</button>
             </div>
         </div>
@@ -52,9 +48,6 @@
 
             <!-- Route Control Panel -->
             <div class="route-control-panel">
-                <div id="source-poke" class="poke-display hidden">
-                    <img src="/static/poke-sprite/A.png" alt="" class="poke-sprite">
-                </div>
 
                 <div id="selected-source" class="selection-display">
                     <div class="selection-label">SOURCE</div>
@@ -70,9 +63,6 @@
                     <div class="selection-value"></div>
                 </div>
 
-                <div id="destination-poke" class="poke-display hidden">
-                    <img src="/static/poke-sprite/A.png" alt="" class="poke-sprite">
-                </div>
             </div>
 
             <!-- Destinations Panel -->

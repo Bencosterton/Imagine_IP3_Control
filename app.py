@@ -188,40 +188,6 @@ def router_status():
     })
 
 
-@app.route('/pokemon/source/<source>')
-def get_source_pokemon(source):
-    try:
-        df = pd.read_csv('IP3_DB.csv')
-        row = df[df['Source'] == source]
-        if not row.empty and 'Src-id' in row.columns:
-            pokemon_id = row['Src-id'].iloc[0]
-            return jsonify({'pokemon_id': pokemon_id})
-    except Exception as e:
-        logger.error(f"Error getting source pokemon: {str(e)}")
-    return jsonify({'pokemon_id': None})
-
-@app.route('/pokemon/destination/<destination>')
-def get_destination_pokemon(destination):
-    try:
-        router_destination = DESTINATION_ALIASES.get(destination, destination)
-        logger.info(f"Looking up destination: {destination} (router name: {router_destination})")
-        
-        df = pd.read_csv('IP3_DB.csv')
-        
-        logger.info(f"CSV columns: {df.columns.tolist()}")
-        
-        row = df[df['Destination'] == router_destination]
-        logger.info(f"Found matching rows: {len(row)}")
-        
-        if not row.empty and 'Dest-id' in df.columns:
-            pokemon_id = int(row['Dest-id'].iloc[0])
-            logger.info(f"Found Pokemon ID: {pokemon_id}")
-            return jsonify({'pokemon_id': pokemon_id})
-            
-    except Exception as e:
-        logger.error(f"Error getting destination pokemon: {str(e)}")
-    return jsonify({'pokemon_id': None})
-
 if __name__ == '__main__':
     logger.info("Starting Flask server...")
     initialize_router()

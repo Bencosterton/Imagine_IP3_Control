@@ -1,4 +1,3 @@
-// static/js/main.js
 document.addEventListener('DOMContentLoaded', function() {
     let selectedSource = null;
     let selectedDestination = null;
@@ -158,12 +157,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('#selected-source .selection-value').textContent = source;
         updateTakeButton();
 
+    }
 
     function resetSelections() {
         document.querySelectorAll('.source-btn, .control-btn').forEach(btn => btn.classList.remove('selected'));
         document.querySelectorAll('.destination-btn').forEach(btn => btn.classList.remove('selected'));
         document.querySelector('#selected-source .selection-value').textContent = '';
         document.querySelector('#selected-destination .selection-value').textContent = '';
+        document.getElementById('lock-message').classList.remove('visible');
         selectedSource = null;
         selectedDestination = null;
         updateTakeButton();
@@ -208,6 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
         this.querySelector('.selection-value').textContent = '';
         document.querySelectorAll('.destination-btn').forEach(btn => btn.classList.remove('selected'));
         updateTakeButton();
+        lockMessage = document.getElementById('lock-message').classList.remove('visible');
     });
 
     document.querySelector('.take-button').addEventListener('click', function() {
@@ -224,16 +226,22 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    resetSelections();
+                console.log('Route response:', data);  
+                const lockMessage = document.getElementById('lock-message');
+                console.log('Lock message element:', lockMessage);  
+                
+                if (data.locked) {
+                    console.log('Showing lock message'); 
+                    lockMessage.classList.add('visible');
                 } else {
-                    alert('Route failed: ' + data.message);
+                    console.log('Hiding lock message'); 
+                    lockMessage.classList.remove('visible');
+                    
+                    if (data.success) {
+                        resetSelections();
+                    }
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Route failed: Network error');
-            });
         }
     });
 
@@ -243,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Initialize all components
+    // Initialize
     updateTimestamp();
     setupSearch('source-search', 'source-btn', 'source-count');
     setupSearch('destination-search', 'destination-btn', 'destination-count');

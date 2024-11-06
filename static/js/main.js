@@ -2,7 +2,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     let selectedSource = null;
     let selectedDestination = null;
-    let pokeMode = false;
 
     // Get the time
     function updateTimestamp() {
@@ -147,66 +146,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Pokemon functionality
-    function initializePokemonMode() {
-        const pokeCheckbox = document.getElementById('poke-mode');
-        const sourcePoke = document.getElementById('source-poke');
-        const destinationPoke = document.getElementById('destination-poke');
-
-        pokeCheckbox.addEventListener('change', function() {
-            pokeMode = this.checked;
-            sourcePoke.classList.toggle('hidden', !pokeMode);
-            destinationPoke.classList.toggle('hidden', !pokeMode);
-            
-            if (pokeMode) {
-                if (!selectedSource) {
-                    document.querySelector('#source-poke img').src = '/static/poke-sprite/A.png';
-                }
-                if (!selectedDestination) {
-                    document.querySelector('#destination-poke img').src = '/static/poke-sprite/A.png';
-                }
-                if (selectedSource) {
-                    updateSourcePokemon(selectedSource);
-                }
-                if (selectedDestination) {
-                    updateDestinationPokemon(selectedDestination);
-                }
-            }
-        });
-    }
-
-    function updateSourcePokemon(source) {
-        if (!pokeMode) return;
-        
-        fetch(`/pokemon/source/${source}`)
-            .then(response => response.json())
-            .then(data => {
-                const pokemonImg = document.querySelector('#source-poke img');
-                if (data.pokemon_id) {
-                    pokemonImg.src = `/static/poke-sprite/${data.pokemon_id}.png`;
-                } else {
-                    pokemonImg.src = '/static/poke-sprite/A.png';
-                }
-            })
-            .catch(error => console.error('Error loading pokemon:', error));
-    }
-
-    function updateDestinationPokemon(destination) {
-        if (!pokeMode) return;
-        
-        fetch(`/pokemon/destination/${destination}`)
-            .then(response => response.json())
-            .then(data => {
-                const pokemonImg = document.querySelector('#destination-poke img');
-                if (data.pokemon_id) {
-                    pokemonImg.src = `/static/poke-sprite/${data.pokemon_id}.png`;
-                } else {
-                    pokemonImg.src = '/static/poke-sprite/A.png';
-                }
-            })
-            .catch(error => console.error('Error loading pokemon:', error));
-    }
-
     // Selection functionality
     function selectSource(source, buttonElement) {
         document.querySelectorAll('.source-btn, .control-btn').forEach(b => b.classList.remove('selected'));
@@ -219,20 +158,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('#selected-source .selection-value').textContent = source;
         updateTakeButton();
 
-        if (pokeMode) {
-            updateSourcePokemon(source);
-        }
-    }
 
     function resetSelections() {
         document.querySelectorAll('.source-btn, .control-btn').forEach(btn => btn.classList.remove('selected'));
         document.querySelectorAll('.destination-btn').forEach(btn => btn.classList.remove('selected'));
         document.querySelector('#selected-source .selection-value').textContent = '';
         document.querySelector('#selected-destination .selection-value').textContent = '';
-        if (pokeMode) {
-            document.querySelector('#source-poke img').src = '/static/poke-sprite/A.png';
-            document.querySelector('#destination-poke img').src = '/static/poke-sprite/A.png';
-        }
         selectedSource = null;
         selectedDestination = null;
         updateTakeButton();
@@ -262,9 +193,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('#selected-destination .selection-value').textContent = selectedDestination;
             updateTakeButton();
             updateDestinationStatus(selectedDestination);
-            if (pokeMode) {
-                updateDestinationPokemon(selectedDestination);
-            }
         });
     });
 
@@ -272,9 +200,6 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedSource = null;
         this.querySelector('.selection-value').textContent = '';
         document.querySelectorAll('.source-btn, .control-btn').forEach(btn => btn.classList.remove('selected'));
-        if (pokeMode) {
-            document.querySelector('#source-poke img').src = '/static/poke-sprite/A.png';
-        }
         updateTakeButton();
     });
 
@@ -282,9 +207,6 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedDestination = null;
         this.querySelector('.selection-value').textContent = '';
         document.querySelectorAll('.destination-btn').forEach(btn => btn.classList.remove('selected'));
-        if (pokeMode) {
-            document.querySelector('#destination-poke img').src = '/static/poke-sprite/A.png';
-        }
         updateTakeButton();
     });
 
@@ -326,5 +248,4 @@ document.addEventListener('DOMContentLoaded', function() {
     setupSearch('source-search', 'source-btn', 'source-count');
     setupSearch('destination-search', 'destination-btn', 'destination-count');
     initializeCategories();
-    initializePokemonMode();
 });
